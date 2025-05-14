@@ -1,20 +1,22 @@
 INCLUDY:
 "UnityCG.cginc" - podstawowe funkcje matematyczne (UnityShaderVariables, UnityInstancing, HLSLSupport)
-"UnityStandardBRDF.cginc" - jeszcze wiêcej funkcji matematycznych (UnityCG, UnityLightingCommon, UnityStandardConfig)
+"UnityStandardBRDF.cginc" - jeszcze wiï¿½cej funkcji matematycznych (UnityCG, UnityLightingCommon, UnityStandardConfig)
 "UnityStandardUtils.cginc" - kownersja energii (UnityCG, UnityStandardConfig)
 "UnityPBSLighting.cginc" - Physically-Based Shading (UnityStandardUtils, UnityStandardBRDF, UnityGlobalIllumination)
+"AutoLight.cginc" - operacje na oÅ›wietleniu (HLSLSupport, UnityShadowLibrary)
 
 ATRYBUTY W PROPERTIES:
 [Gamma] - konwertuje na gamma color space
 
 TAGI:
-"LightMode" - jaki model oœwietlenia ma byæ u¿ywany
-	"ForwardBase" - pierwsze przejœcie u¿ywane w forward rendering path, daje dostêp do g³ównego œwiat³a directional sceny
+"LightMode" - jaki model oï¿½wietlenia ma byï¿½ uï¿½ywany
+	"ForwardBase" - pierwsze przejï¿½cie uï¿½ywane w forward rendering path, daje dostï¿½p do gï¿½ï¿½wnego ï¿½wiatï¿½a directional sceny
 
 PRAGMA:
-vertex nazwaFunkcji - vertexShader z podan¹ nazw¹
-fragment nazwaFunkcji - fragmentShader z podan¹ nazw¹
-target wersja - u¿ywany model shaderu, domyœlnie 2.5, wy¿sze pozwalaj¹ na korzystanie z funkcjonalnoœci nowszych gpu ale mo¿e nie dzia³aæ na starszych https://docs.unity3d.com/560/Documentation/Manual/SL-ShaderCompileTargets.html
+vertex nazwaFunkcji - vertexShader z podanï¿½ nazwï¿½
+fragment nazwaFunkcji - fragmentShader z podanï¿½ nazwï¿½
+target wersja - uï¿½ywany model shaderu, domyï¿½lnie 2.5, wyï¿½sze pozwalajï¿½ na korzystanie z funkcjonalnoï¿½ci nowszych gpu ale moï¿½e nie dziaï¿½aï¿½ na starszych https://docs.unity3d.com/560/Documentation/Manual/SL-ShaderCompileTargets.html
+multi_compile NAZWA - tworzy warianty shaderu
 
 ZMIENNE:
 sampler2D - textura 2D np _MainTex
@@ -25,28 +27,29 @@ position - pozycja lokalna vertexu
 sv_position - pozycja vertexu na ekranie
 sv_target - finalny kolor pikselu
 normal - wektor normalny vertexu
-texcoord0 - do przechowywania wartoœci float4 (max texcoord7 lub 15)
+texcoord0 - do przechowywania wartoï¿½ci float4 (max texcoord7 lub 15)
 
 TRANSFORMACJE:
-UnityObjectToClipPos(position) - pozycja lokalna na pozycjê ekranu
-UnityObjectToWorldNormal(normal) - pozycja lokalna wektoru normalnego na pozycjê œwiata (UnityStandardBRDF)
-TRANSFORM_TEX - konwertuje coordy uv tak aby zgadza³y siê z tilingiem i offsetem
+UnityObjectToClipPos(position) - pozycja lokalna na pozycjï¿½ ekranu
+UnityObjectToWorldNormal(normal) - pozycja lokalna wektoru normalnego na pozycjï¿½ ï¿½wiata (UnityStandardBRDF)
+TRANSFORM_TEX - konwertuje coordy uv tak aby zgadzaï¿½y siï¿½ z tilingiem i offsetem
 
 FUNCKJE:
 normalize(vector) - normalizacja wektoru
 DotClamped(vector, vector) - dot product w zakresie 0 - 1 (StandardBRDF)
-tex2D(sampler2D, uv) - sampluje texture 2d na³o¿on¹ na uv zwracaj¹c kolor na danym pikselu
+tex2D(sampler2D, uv) - sampluje texture 2d naï¿½oï¿½onï¿½ na uv zwracajï¿½c kolor na danym pikselu
 reflect(direction, surfaceN) - zwraca wektor odbicia
-EnergyConservationBetweenDiffuseAndSpecular(albedo, _SpecularTint.rgb, oneMinusReflectivity) - upewnia siê ¿e albedo zachowa w³aœciw¹ energiê (StandardUtils)
-DiffuseAndSpecularFromMetallic(albedo, _Metallic, specularTint, oneMinusReflectivity) - poprawia oœwietlenie przy metalicznych materia³ach (StandardUtils)
-UNITY_BRDF_PBS(diffuseColor, specularColor, oneMinusReflectivity, smoothness, normal, viewDirection, directLight, indirectLight) - zwraca kolor na podstawie podanych parametrów (PBSLighting, target 3.0)
+EnergyConservationBetweenDiffuseAndSpecular(albedo, _SpecularTint.rgb, oneMinusReflectivity) - upewnia siï¿½ ï¿½e albedo zachowa wï¿½aï¿½ciwï¿½ energiï¿½ (StandardUtils)
+DiffuseAndSpecularFromMetallic(albedo, _Metallic, specularTint, oneMinusReflectivity) - poprawia oï¿½wietlenie przy metalicznych materiaï¿½ach (StandardUtils)
+UNITY_BRDF_PBS(diffuseColor, specularColor, oneMinusReflectivity, smoothness, normal, viewDirection, directLight, indirectLight) - zwraca kolor na podstawie podanych parametrï¿½w (PBSLighting, target 3.0)
+UNITY_LIGHT_ATTENUATION(attenuation, smth with shadows, worldPos) - oblicza prawidÅ‚owÄ… attenuacjÄ™(fading Å›wiatÅ‚a wraz z dystansem) Aby prawidÅ‚owo dziaÅ‚aÅ‚o trzeba dodaÄ‡ #define POINT przed wywoÅ‚aniem tego
 
-STA£E ZMIENNE
-unity_ObjectToWorld - macierz transformacji, pozycja lokalna na œwiata
-_WorldSpaceLightPos0 - pozycja aktualnego oœwietlenia
-_LightColor0 - kolor aktualnego oœwietlenia (UnityLightingCommon)
-_WorldSpaceCameraPos - pozycja kamery w œwiecie (UnityShaderVariables)
+STAï¿½E ZMIENNE
+unity_ObjectToWorld - macierz transformacji, pozycja lokalna na ï¿½wiata
+_WorldSpaceLightPos0 - pozycja aktualnego oï¿½wietlenia
+_LightColor0 - kolor aktualnego oï¿½wietlenia (UnityLightingCommon)
+_WorldSpaceCameraPos - pozycja kamery w ï¿½wiecie (UnityShaderVariables)
 
 STRUKTURY:
-UnityLight(color, dir, ndotl) - kolorŒwiat³a, kierunekŒwiat³a, DotClamped(normal, kierunekŒwiat³a), struktura œwiat³a u¿ywana do przesy³ania informacji w shaderach (LightingCommon)
-UnityIndirect(diffuse, specular) - ambientLight, environmental reflections, struktura œwiat³a niebezpoœredniego
+UnityLight(color, dir, ndotl) - kolorï¿½wiatï¿½a, kierunekï¿½wiatï¿½a, DotClamped(normal, kierunekï¿½wiatï¿½a), struktura ï¿½wiatï¿½a uï¿½ywana do przesyï¿½ania informacji w shaderach (LightingCommon)
+UnityIndirect(diffuse, specular) - ambientLight, environmental reflections, struktura ï¿½wiatï¿½a niebezpoï¿½redniego
